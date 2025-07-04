@@ -8,5 +8,11 @@
         public List<Rescue> Rescues { get; set; } = new List<Rescue>();
 
         private Client() { }
+
+        public Client(int id, string name)
+        {
+            Id = id;
+            Name = name;
+        }
     }
 }

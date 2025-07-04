@@ -6,7 +6,9 @@
         public decimal Value { get; set; }
         public DateTime ApplicationDate { get; set; }
         public int FundId { get; set; }
+        public Fund Fund { get; set; }
         public int ClientId { get; set; }
+        public Client Client { get; set; }
 
         private Application() { }
 

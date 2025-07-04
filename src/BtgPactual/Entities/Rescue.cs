@@ -7,7 +7,9 @@
         public decimal IncomeTax { get; set; }
         public DateTime RescueDate { get; set; }
         public int FundId { get; set; }
+        public Fund Fund { get; set; }
         public int ClientId { get; set; }
+        public Client Client { get; set; }
 
         public Rescue(decimal rescueValue, DateTime rescueDate, Application application)
         {
