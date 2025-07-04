@@ -1,0 +1,20 @@
+name: BtgPactual
+
+volumes:
+  btgpactual_data:
+    driver: local
+
+services:
+  db:
+    image: mysql/mysql-server:latest
+    container_name: btgpactual_db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: btgPactual
+      MYSQL_DATABASE: btgpactual_db
+      MYSQL_USER: btgpactual_user
+      MYSQL_PASSWORD: btgPactual
+    ports:
+      - "3306:3306"
+    volumes:
+      - btgpactual_data:/var/lib/mysql
