@@ -12,7 +12,7 @@
 
         private Application() { }
 
-        public Application(decimal value, DateTime applicationDate, int fundId, int clientId) 
+        public Application(decimal value, int fundId, int clientId) 
         { 
             if (value <= 0)
             {
@@ -20,7 +20,7 @@
             }
 
             Value = value;
-            ApplicationDate = applicationDate;
+            ApplicationDate = DateTime.Now;
             FundId = fundId;
             ClientId = clientId;
         }

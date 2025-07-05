@@ -1,4 +1,5 @@
 using BtgPactual.Configurations;
+using BtgPactual.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,6 +16,8 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
     options.UseMySql(connectionString: builder.Configuration.GetConnectionString("MysqlConnection"), mysqlVersion);
 });
+
+builder.Services.AddScoped<IAliquotService, AliquotService>();
 
 var app = builder.Build();
 

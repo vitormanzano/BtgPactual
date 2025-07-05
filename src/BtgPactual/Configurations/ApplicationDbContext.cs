@@ -15,6 +15,10 @@ namespace BtgPactual.Configurations
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Application>()
+                .Property(a => a.Value)
+                .HasColumnType("DECIMAL(18,2)");
+                
+            modelBuilder.Entity<Application>()
                 .HasOne(a => a.Fund)
                 .WithMany(x => x.Applications)
                 .HasForeignKey(x => x.FundId);
@@ -23,6 +27,14 @@ namespace BtgPactual.Configurations
                 .HasOne(r => r.Client)
                 .WithMany(x => x.Applications)
                 .HasForeignKey(x => x.ClientId);
+
+            modelBuilder.Entity<Rescue>()
+                .Property(r => r.IncomeTax)
+                .HasColumnType("DECIMAL(18,2)");
+
+            modelBuilder.Entity<Rescue>()
+                .Property(r => r.RescueValue)
+                .HasColumnType("DECIMAL(18,2)");
 
             modelBuilder.Entity<Rescue>()
                 .HasOne(r => r.Fund)
@@ -45,8 +57,6 @@ namespace BtgPactual.Configurations
                 new Client(2, "John"),
                 new Client(3, "Doe")
             );
-                
-
         }
     }
 }
