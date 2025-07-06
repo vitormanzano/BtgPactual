@@ -1,6 +1,7 @@
 ﻿
 using BtgPactual.Configurations;
 using BtgPactual.Entities;
+using BtgPactual.Mapper;
 using BtgPactual.Responses;
 using Microsoft.EntityFrameworkCore;
 
@@ -49,14 +50,58 @@ namespace BtgPactual.Services
             return new ApplicationDto(application.Id, application.Value, application.ApplicationDate);
         }
 
-        public Task<FundDetailsDto> Listar()
+        public async Task<List<FundDetailsDto>> List()
         {
-            throw new NotImplementedException();
+            var funds = await _context.Funds
+                .Include(x => x.Applications)
+                .Include(x => x.Rescues)
+                .ToListAsync();
+
+            var fundsDto = funds.Select(x => x.MapToDto()).ToList();
+
+            return fundsDto;
         }
 
-        public Task<RescueDto> Rescue(Request.Request request)
+        public async Task<RescueDto> Rescue(Request.Request request)
         {
-            throw new NotImplementedException();
+            if (request.Value < 0)
+                throw new ArgumentException("Rescue value must be greather than zero");
+
+            var client = await _context.Clients
+                .Include(x => x.Rescues)
+                .Include(x => x.Applications)
+                .FirstOrDefaultAsync(x => x.Id == request.ClientId);
+
+            if (client is null)
+                throw new InvalidOperationException("Client not found!");
+
+            var fund = await _context.Funds
+                .FindAsync(request.FundNumber);
+
+            if (fund is null)
+                throw new InvalidOperationException("Fund not found!");
+
+            await _context.Entry(fund).Collection(x => x.Applications).LoadAsync();
+
+            var application = fund.GetApplication(request.ApplicationId);
+
+            if (application.Value < request.Value)
+                throw new ArgumentException("Rescue value cannot be fewer than application value");
+
+            application.WithdrawBalance(request.Value);
+
+            var rescue = new Rescue(request.Value, request.Date, application);
+            rescue.ClientId = request.ClientId;
+            rescue.FundId = request.FundNumber;
+
+            _context.Applications.Update(application);
+            _context.Funds.Update(fund);
+
+            _context.Rescues.Add(rescue);
+
+            await _context.SaveChangesAsync();
+
+            return new RescueDto(rescue.Id, rescue.RescueValue, rescue.RescueDate, rescue.IncomeTax, rescue.NetValue);
         }
     }
 }

@@ -44,5 +44,54 @@ namespace BtgPactual.Controllers
                 }
             }
         }
+
+        [HttpPost("{fundId}/rescue")]
+        public async Task<IActionResult> Rescue(int fundId, [FromBody] Request.Request request)
+        {
+            try
+            {
+                request.FundNumber = fundId;
+                var rescue = await _aliquotService.Rescue(request);
+
+                return CreatedAtAction(nameof(Apply), new
+                {
+                    data = new
+                    {
+                        id = rescue.Id,
+                        value = rescue.Value,
+                        applicationDate = rescue.RescueDate,
+                    }
+                });
+            }
+            catch (Exception ex)
+            {
+                switch (ex)
+                {
+                    case ArgumentException:
+                        return NotFound(ex.Message);
+
+                    default:
+                        return BadRequest(ex.Message);
+                }
+            }
+        }
+
+        [HttpGet("list")]
+        public async Task<IActionResult> Rescue()
+        {
+            try
+            {
+                var fundApplications = await _aliquotService.List();
+
+                return Ok(new
+                {
+                    data = fundApplications
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }

@@ -37,6 +37,11 @@ namespace BtgPactual.Configurations
                 .HasColumnType("DECIMAL(18,2)");
 
             modelBuilder.Entity<Rescue>()
+                .Property(r => r.NetValue)
+                .HasColumnType("DECIMAL(18,2)");
+
+
+            modelBuilder.Entity<Rescue>()
                 .HasOne(r => r.Fund)
                 .WithMany(x => x.Rescues)
                 .HasForeignKey(x => x.FundId);

@@ -6,6 +6,6 @@ namespace BtgPactual.Services
     {
         Task<ApplicationDto> Apply(Request.Request request);
         Task<RescueDto> Rescue(Request.Request request);
-        Task<FundDetailsDto> Listar();
+        Task<List<FundDetailsDto>> List();
     }
 }
