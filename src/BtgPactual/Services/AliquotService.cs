@@ -90,7 +90,7 @@ namespace BtgPactual.Services
 
             application.WithdrawBalance(request.Value);
 
-            var rescue = new Rescue(request.Value, request.Date, application);
+            var rescue = new Rescue(request.Value, application);
             rescue.ClientId = request.ClientId;
             rescue.FundId = request.FundNumber;
 

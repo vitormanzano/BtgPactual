@@ -53,7 +53,7 @@ namespace BtgPactual.Controllers
                 request.FundNumber = fundId;
                 var rescue = await _aliquotService.Rescue(request);
 
-                return CreatedAtAction(nameof(Apply), new
+                return CreatedAtAction(nameof(Rescue), new
                 {
                     data = new
                     {
