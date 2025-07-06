@@ -10,14 +10,12 @@
         public Fund Fund { get; set; }
         public int ClientId { get; set; }
         public Client Client { get; set; }
+        public decimal NetValue { get; set; }
 
-        public Rescue(decimal rescueValue, DateTime rescueDate, Application application)
+        public Rescue(decimal rescueValue, Application application)
         {
-            if (rescueDate < application.ApplicationDate)
-                throw new ArgumentException("Rescue date cannot be fewer than application date");
-
             RescueValue = rescueValue;
-            RescueDate = rescueDate;
+            RescueDate = DateTime.Now;
             CalculateIncomeTax(application);
         }
 
@@ -35,7 +33,7 @@
             else
                 IncomeTax = profit * 0.15m;
 
-            RescueValue = RescueValue - IncomeTax;
+            NetValue = RescueValue - IncomeTax;
         }
     }
 }
